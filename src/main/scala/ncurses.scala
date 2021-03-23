@@ -1,7 +1,6 @@
 package nbwmon
 
-import scalanative.native._
-
+import scala.scalanative.unsafe._
 // http://invisible-island.net/ncurses/man/ncurses.3x.html
 
 @link("ncurses")
@@ -35,7 +34,7 @@ object ncurses {
   def box(window: Ptr[Window], verch: ChType, horch: ChType): CInt = extern
 
   @name("mvwprintw")
-  def printFormatted(window: Ptr[Window], y: CInt, x: CInt, fmt: CString, args: CVararg*): CInt = extern
+  def printFormatted(window: Ptr[Window], y: CInt, x: CInt, fmt: CString, args: CVarArg*): CInt = extern
 
   @name("mvwaddch")
   def printChar(window: Ptr[Window], y: CInt, x: CInt, ch: ChType): CInt = extern

@@ -1,6 +1,6 @@
 package nbwmon
 
-import scalanative.native._
+import scala.scalanative.unsafe._
 
 // scala-native#104 should provide those bindings
 @extern
@@ -16,7 +16,7 @@ object posixh {
   type timezone    = CStruct0
 
   implicit class timevalOps(val ptr: Ptr[timeval]) extends AnyVal {
-    def tv_sec: time_t       = !(ptr._1)
-    def tv_usec: suseconds_t = !(ptr._2)
+    def tv_sec: time_t       = !(ptr.at1)
+    def tv_usec: suseconds_t = !(ptr.at2)
   }
 }

@@ -1,7 +1,8 @@
-import scala.scalanative._, native._
+import scala.scalanative.unsafe._
+import scala.scalanative.unsigned._
 
 package object nbwmon {
-  def clear() = print("\033c")
+  def clear() = print("\u001bc")
 
   trait CUnsignedLongIsIntegral extends Integral[CUnsignedLong] {
     def plus(x: CUnsignedLong, y: CUnsignedLong): CUnsignedLong = x + y
@@ -15,6 +16,8 @@ package object nbwmon {
     def toLong(x: CUnsignedLong): Long = x.toLong
     def toFloat(x: CUnsignedLong): Float = x.toFloat
     def toDouble(x: CUnsignedLong): Double = x.toDouble
+    def parseString(str: String): Option[CUnsignedLong] = 
+      str.toIntOption.map(_.toULong)
   }
 
   trait CUnsignedLongOrdering extends Ordering[CUnsignedLong] {
