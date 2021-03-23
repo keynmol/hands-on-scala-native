@@ -1,6 +1,6 @@
 package nbwmon
 
-import scala.scalanative._, native._
+import scala.scalanative._, unsafe._
 
 import Ifaddrs._, IfaddrsH._
 import collection.mutable.Queue
@@ -101,7 +101,7 @@ object Network {
         ifa =>
           fromCString(ifa.name) == interfaceName &&
             ifa.addr.map(_.family == Packet).getOrElse(false))
-        .map(ifa => Counters(ifa.data.cast[Ptr[RtnlLinkStats]]))
+        .map(ifa => Counters(ifa.data.asInstanceOf[Ptr[RtnlLinkStats]]))
     )
   }
 

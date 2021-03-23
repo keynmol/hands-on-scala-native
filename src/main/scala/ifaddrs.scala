@@ -1,7 +1,7 @@
 package nbwmon
 
-import scalanative.native._
-
+import scala.scalanative._
+import unsafe._
 @extern
 object Ifaddrs {
   import IfaddrsH._
@@ -40,11 +40,11 @@ object IfaddrsH {
   implicit class IfaddrsOps(val ptr: Ptr[Ifaddrs]) extends AnyVal {
     // scala-native#634
     // format: off
-    def next: Ptr[Ifaddrs]        = (!(ptr._1)).cast[Ptr[Ifaddrs]]
-    def name: Ptr[CChar]          = !(ptr._2)
-    def flags: SiocgifFlags       = new SiocgifFlags(!(ptr._3))
-    def addr: Option[SockAddrOps] = Option(new SockAddrOps(!(ptr._4)))
-    def data: Ptr[Byte]           = !(ptr._7)
+    def next: Ptr[Ifaddrs]        = (!(ptr.at1)).asInstanceOf[Ptr[Ifaddrs]]
+    def name: Ptr[CChar]          = !(ptr.at2)
+    def flags: SiocgifFlags       = new SiocgifFlags(!(ptr.at3))
+    def addr: Option[SockAddrOps] = Option(new SockAddrOps(!(ptr.at4)))
+    def data: Ptr[Byte]           = !(ptr.at7)
     // format: on
 
     // scala-native#367 we need to manually box Ptr[T]
@@ -95,8 +95,8 @@ object IfaddrsH {
   // format: on
 
   implicit class RtnlLinkStatsOps(val ptr: Ptr[RtnlLinkStats]) extends AnyVal {
-    def rxBytes: CUnsignedInt = !(ptr._3)
-    def txBytes: CUnsignedInt = !(ptr._4)
+    def rxBytes: CUnsignedInt = !ptr.at3
+    def txBytes: CUnsignedInt = !ptr.at4
   }
 
   class SaFamily(val value: CInt) extends AnyVal
@@ -106,7 +106,7 @@ object IfaddrsH {
   }
 
   final val InterfaceNameSize = 14
-  type _14 = Nat.Digit[Nat._1, Nat._4]
+  type _14 = Nat.Digit2[Nat._1, Nat._4]
 
   // format: off
   type SockAddr = CStruct2[
@@ -116,7 +116,7 @@ object IfaddrsH {
   // format: on
 
   implicit class SockAddrOps(val ptr: Ptr[SockAddr]) {
-    def family: SaFamily         = new SaFamily(!(ptr._1))
-    def data: CArray[CChar, _14] = !(ptr._2)
+    def family: SaFamily         = new SaFamily(!(ptr.at1))
+    def data: CArray[CChar, _14] = !(ptr.at2)
   }
 }
